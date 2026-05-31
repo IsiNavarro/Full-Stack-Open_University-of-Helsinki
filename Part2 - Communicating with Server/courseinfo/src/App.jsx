@@ -8,8 +8,15 @@ const Course = ({course}) => {
 const Header = ({name}) => <h1>{name}</h1>
 
 const Content = ({parts}) => {
-  return(
-    parts.map(part => <Part key={part.id} part={part}/>)
+  return(<>
+    {parts.map(part => <Part key={part.id} part={part}/>)}
+    <h4>
+      Total of {parts.reduce(
+      (sum, part) => sum + part.exercises,
+      0
+      )} exercises
+      </h4>
+    </>
   )
 }
 
