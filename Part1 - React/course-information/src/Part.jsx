@@ -1,4 +1,4 @@
-const Part = (prompts) => {
+const Part = (props) => {
     return <p></p>
 }
 export default Part

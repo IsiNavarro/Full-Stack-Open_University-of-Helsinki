@@ -1,6 +1,6 @@
 import Part from "./Part"
 
-const Content = (prompts) => {
+const Content = (props) => {
     return <div>
         <Part/>
     </div>
