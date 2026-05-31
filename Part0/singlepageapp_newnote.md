@@ -1,0 +1,10 @@
+```mermaid
+sequenceDiagram
+    participant browser
+    participant server
+
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa (JSON Data)
+    activate server
+    server-->>browser: Status 201 (no further HTTP Requests) (Event handler re-render note list)
+    deactivate server
+```
