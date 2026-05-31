@@ -1,20 +1,23 @@
 import { useState } from "react"
 
 const Statistics = ({good, neutral, bad}) => {
-
   const totalClicks = good + neutral + bad
   const average = (1*good + 0*neutral + -1*bad) / totalClicks
   const positive = good / totalClicks * 100
 
-  return <>
-  <h2>statistics</h2>
-  <p>good {good}</p>
-  <p>neutral {neutral}</p>
-  <p>bad {bad}</p>
-  <p>all {totalClicks}</p>
-  <p>average {average}</p>
-  <p>positive {positive} %</p>
-  </>
+  if (totalClicks <= 0) {
+    return <p>No feedback given</p>
+  } else {
+    return <>
+    <h2>statistics</h2>
+    <p>good {good}</p>
+    <p>neutral {neutral}</p>
+    <p>bad {bad}</p>
+    <p>all {totalClicks}</p>
+    <p>average {average}</p>
+    <p>positive {positive} %</p>
+    </>
+  }
 }
 
 const App = () => {
