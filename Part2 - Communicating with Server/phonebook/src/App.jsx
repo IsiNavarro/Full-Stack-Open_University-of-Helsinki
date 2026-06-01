@@ -13,10 +13,15 @@ const App = () => {
   const handleClick = (e) => {
     e.preventDefault()
     const personObject = {
-      name: newName
+      name: newName.trim()
     }
-    setPersons(persons.concat(personObject))
-    setNewName('')
+    if (persons.some(person => person.name.trim() === newName.trim())){
+      alert(`${newName.trim()} already exists!`) 
+    }
+    else {
+      setPersons(persons.concat(personObject))
+      setNewName('')
+    }
   }
 
   return (
