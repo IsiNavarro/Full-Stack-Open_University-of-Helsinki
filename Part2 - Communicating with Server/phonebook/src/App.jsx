@@ -35,7 +35,15 @@ const App = () => {
       number: newPhoneNumber
     }
     if (persons.some(person => person.name.trim() === newName.trim())){
-      alert(`${newName.trim()} already exists!`) 
+      if (confirm(`${newName.trim()} already exists. Do you want to update their number?`)) {
+
+        const [existingPerson] = persons.filter(person => person.name.trim() === newName.trim())
+        personObject.id = existingPerson.id
+
+        ServerCommunication.update(personObject).then(returnedPerson => {
+          setPersons(persons.map(person => person.id === returnedPerson.id ? returnedPerson : person))
+        })
+      }
     }
     else {
       ServerCommunication.create(personObject).then(person => {
