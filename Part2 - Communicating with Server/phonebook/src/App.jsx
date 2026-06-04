@@ -12,7 +12,9 @@ const App = () => {
   const [newPhoneNumber, setNewPhoneNumber] = useState('')
   const [filterString, setNewFilterString] = useState('')
   const [message, setMessage] = useState(null)
-  const setMessageTimed = (message, delay = 3000) => {
+  const [success, setSuccess] = useState(false)
+  const setMessageTimed = (message, success, delay = 3000) => {
+    setSuccess(success)
     setMessage(message)
     setTimeout(()=>{
       setMessage(null)
@@ -53,15 +55,16 @@ const App = () => {
 
         ServerCommunication.update(personObject).then(returnedPerson => {
           setPersons(persons.map(person => person.id === returnedPerson.id ? returnedPerson : person))
-          setMessageTimed('Person updated succesfully!')          
-        }).catch(error => alert('Error updating person!'))
+          setMessageTimed('Person updated succesfully!', true)          
+        }).catch(error => setMessageTimed(`The information for ${newName} has already been deleted from the database.`, false)
+      )
       }
     }
     else {
       ServerCommunication.create(personObject).then(person => {
         setPersons(persons.concat(person))
-        setMessageTimed('New person created succesfully!')
-      }).catch(error => alert('Error creating new person!'))
+        setMessageTimed('New person created succesfully!', true)
+      }).catch(error => setMessageTimed('Error creating new person', false))
       resetFormInput()
     }
   }
@@ -74,8 +77,8 @@ const App = () => {
     if (confirm(`Do you want to delete ${person.name}?`)) {}
     ServerCommunication.remove(person.id).then(removedPerson => {
       setPersons(persons.filter((person) => person.id != removedPerson.id))
-      setMessageTimed('Person deleted succesfully!')
-    }).catch(error => alert('Error deleting person from the server!'))
+      setMessageTimed('Person deleted succesfully!', true)
+    }).catch(error => setMessageTimed('Error deleting person from the server!', false))
   }
 
   const personsToShow = persons.filter((person) => person.name.toLowerCase().includes(filterString))
@@ -84,7 +87,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message}/>
+      <Notification message={message} success={success}/>
       <Filter value={filterString} onChange={handleFilterChange}/>
       <h3>add a new</h3>
       <PersonForm 
