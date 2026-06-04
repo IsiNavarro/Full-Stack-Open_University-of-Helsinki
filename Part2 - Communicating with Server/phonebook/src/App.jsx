@@ -12,6 +12,11 @@ const App = () => {
   
   const [persons, setPersons] = useState([])
 
+  const resetFormInput = () => {
+    setNewName('')
+    setNewPhoneNumber('')
+  }
+
   useEffect(() => {
     axios
     .get('http://localhost:3001/persons')
@@ -37,8 +42,10 @@ const App = () => {
       alert(`${newName.trim()} already exists!`) 
     }
     else {
-      setPersons(persons.concat(personObject))
-      setNewName('')
+      axios.post('http://localhost:3001/persons', personObject).then(response => {
+        setPersons(persons.concat(response.data))
+      })
+      resetFormInput()
     }
   }
 
