@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
-import axios from 'axios'
+import ServerCommunication from './services/ServerCommunication'
+
 
 const App = () => {
   
@@ -18,13 +19,8 @@ const App = () => {
   }
 
   useEffect(() => {
-    axios
-    .get('http://localhost:3001/persons')
-    .then((response => {
-      setPersons(response.data)
-    }))
+    ServerCommunication.getAll().then(persons => setPersons(persons))
   }, [])
-
   const handleNameChange = (e) => {
     setNewName(e.target.value)
   }
@@ -42,8 +38,8 @@ const App = () => {
       alert(`${newName.trim()} already exists!`) 
     }
     else {
-      axios.post('http://localhost:3001/persons', personObject).then(response => {
-        setPersons(persons.concat(response.data))
+      ServerCommunication.create(personObject).then(person => {
+        setPersons(persons.concat(person))
       })
       resetFormInput()
     }
@@ -55,8 +51,8 @@ const App = () => {
 
   const handleDelete = (person) => {
     if (confirm(`Do you want to delete ${person.name}?`)) {}
-    axios.delete(`http://localhost:3001/persons/${person.id}`).then(response => {
-      setPersons(persons.filter((person) => person.id != response.data.id))
+    ServerCommunication.remove(person.id).then(removedPerson => {
+      setPersons(persons.filter((person) => person.id != removedPerson.id))
     })
   }
 
