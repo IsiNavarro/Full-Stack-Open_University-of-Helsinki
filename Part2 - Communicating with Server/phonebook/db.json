@@ -9,6 +9,46 @@
       "name": "Ada Lovelace",
       "number": "39-44-5323523",
       "id": "2"
+    },
+    {
+      "name": "new",
+      "number": "1234",
+      "id": "r8m0pD6v7MI"
+    },
+    {
+      "name": "isidro",
+      "number": "123",
+      "id": "ILY9XTfqzZs"
+    },
+    {
+      "name": "new name",
+      "number": "123",
+      "id": "Vq_8ft6HtAk"
+    },
+    {
+      "name": "qerqe",
+      "number": "123",
+      "id": "95tvdlGaSUU"
+    },
+    {
+      "name": "aeefaf",
+      "number": "12",
+      "id": "xtgJ-d7WoDM"
+    },
+    {
+      "name": "1234",
+      "number": "1241",
+      "id": "s5CeLbAQw_E"
+    },
+    {
+      "name": "this is me",
+      "number": "1234",
+      "id": "IzRqJqxt-cU"
+    },
+    {
+      "name": "ageg",
+      "number": "124",
+      "id": "QS79MtUR1MA"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

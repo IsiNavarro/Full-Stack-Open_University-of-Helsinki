@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import ServerCommunication from './services/ServerCommunication'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -10,13 +11,22 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhoneNumber, setNewPhoneNumber] = useState('')
   const [filterString, setNewFilterString] = useState('')
-  
+  const [message, setMessage] = useState(null)
+  const setMessageTimed = (message, delay = 3000) => {
+    setMessage(message)
+    setTimeout(()=>{
+      setMessage(null)
+    }, delay)
+
+  }
   const [persons, setPersons] = useState([])
 
   const resetFormInput = () => {
     setNewName('')
     setNewPhoneNumber('')
   }
+
+  
 
   useEffect(() => {
     ServerCommunication.getAll().then(persons => setPersons(persons)).catch(error => alert('Error fetching data from server!'))
@@ -43,12 +53,14 @@ const App = () => {
 
         ServerCommunication.update(personObject).then(returnedPerson => {
           setPersons(persons.map(person => person.id === returnedPerson.id ? returnedPerson : person))
+          setMessageTimed('Person updated succesfully!')          
         }).catch(error => alert('Error updating person!'))
       }
     }
     else {
       ServerCommunication.create(personObject).then(person => {
         setPersons(persons.concat(person))
+        setMessageTimed('New person created succesfully!')
       }).catch(error => alert('Error creating new person!'))
       resetFormInput()
     }
@@ -62,6 +74,7 @@ const App = () => {
     if (confirm(`Do you want to delete ${person.name}?`)) {}
     ServerCommunication.remove(person.id).then(removedPerson => {
       setPersons(persons.filter((person) => person.id != removedPerson.id))
+      setMessageTimed('Person deleted succesfully!')
     }).catch(error => alert('Error deleting person from the server!'))
   }
 
@@ -71,6 +84,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
       <Filter value={filterString} onChange={handleFilterChange}/>
       <h3>add a new</h3>
       <PersonForm 
