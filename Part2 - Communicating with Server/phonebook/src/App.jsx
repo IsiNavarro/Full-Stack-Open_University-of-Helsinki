@@ -36,7 +36,7 @@ const App = () => {
     e.preventDefault()
     const personObject = {
       name: newName.trim(),
-      phoneNumber: newPhoneNumber
+      number: newPhoneNumber
     }
     if (persons.some(person => person.name.trim() === newName.trim())){
       alert(`${newName.trim()} already exists!`) 
@@ -53,6 +53,13 @@ const App = () => {
     setNewFilterString(e.target.value)
   }
 
+  const handleDelete = (person) => {
+    if (confirm(`Do you want to delete ${person.name}?`)) {}
+    axios.delete(`http://localhost:3001/persons/${person.id}`).then(response => {
+      setPersons(persons.filter((person) => person.id != response.data.id))
+    })
+  }
+
   const personsToShow = persons.filter((person) => person.name.toLowerCase().includes(filterString))
 
 
@@ -67,7 +74,8 @@ const App = () => {
       buttonOnClick={handleSubmit}/>
       
       <h2>Numbers</h2>
-      <Persons persons={personsToShow}/>
+      <Persons persons={personsToShow}
+      handleDelete={handleDelete}/>
       </div>
   )
 }
