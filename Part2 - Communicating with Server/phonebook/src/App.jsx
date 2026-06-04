@@ -19,8 +19,9 @@ const App = () => {
   }
 
   useEffect(() => {
-    ServerCommunication.getAll().then(persons => setPersons(persons))
+    ServerCommunication.getAll().then(persons => setPersons(persons)).catch(error => alert('Error fetching data from server!'))
   }, [])
+
   const handleNameChange = (e) => {
     setNewName(e.target.value)
   }
@@ -42,13 +43,13 @@ const App = () => {
 
         ServerCommunication.update(personObject).then(returnedPerson => {
           setPersons(persons.map(person => person.id === returnedPerson.id ? returnedPerson : person))
-        })
+        }).catch(error => alert('Error updating person!'))
       }
     }
     else {
       ServerCommunication.create(personObject).then(person => {
         setPersons(persons.concat(person))
-      })
+      }).catch(error => alert('Error creating new person!'))
       resetFormInput()
     }
   }
@@ -61,7 +62,7 @@ const App = () => {
     if (confirm(`Do you want to delete ${person.name}?`)) {}
     ServerCommunication.remove(person.id).then(removedPerson => {
       setPersons(persons.filter((person) => person.id != removedPerson.id))
-    })
+    }).catch(error => alert('Error deleting person from the server!'))
   }
 
   const personsToShow = persons.filter((person) => person.name.toLowerCase().includes(filterString))
