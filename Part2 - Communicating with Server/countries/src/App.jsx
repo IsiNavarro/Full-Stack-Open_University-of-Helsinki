@@ -19,8 +19,8 @@ const App = () => {
     }
   , [])
 
-  const getOneCountry = () => {
-    axios.get(countryBaseUrl+countryNamesToShow[0]).then(response => setSelectedCountry(response.data)).catch(error => console.log(error))
+  const getOneCountry = (countryName) => {
+    axios.get(countryBaseUrl+countryName).then(response => setSelectedCountry(response.data)).catch(error => console.log(error))
   }
   
 
@@ -35,11 +35,12 @@ const App = () => {
     setCountryNamesToShow(filteredCountries)
 
     if (countryNamesToShow.length === 1) {
-      getOneCountry()
+      getOneCountry(countryNamesToShow[0])
     }
     else setSelectedCountry(null)
-
-    
+  }
+  const handleShow = (e) => {
+    getOneCountry(e.target.value)
   }
 
   return (
@@ -51,7 +52,7 @@ const App = () => {
       <Country selectedCountry={selectedCountry}/>:
 
       countryNamesToShow.length < 10 ?
-        countryNamesToShow.map(countryName => <li key={countryName}>{countryName}</li>) 
+        countryNamesToShow.map(countryName => <li key={countryName}>{countryName} <button value={countryName} onClick={handleShow}>Show</button></li>) 
         :<div>Too many countries, sepecify some more</div>}
       
       
