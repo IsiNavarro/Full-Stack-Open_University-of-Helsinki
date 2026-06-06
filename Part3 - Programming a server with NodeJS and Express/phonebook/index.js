@@ -24,6 +24,21 @@ let persons = [
     }
 ]
 
+const getDateNow = () => {
+    const now = Date.now()
+    const nowDate = new Date(now)
+    return nowDate.toUTCString()
+}
+
+app.get('/info', (req, res) => {
+    const receivedTime = getDateNow()
+
+    
+    res.send(`
+        <p>Phonebook has info for ${persons.length} people</p>
+        <p>${receivedTime}</p>
+        `)
+})
 
 app.get('/api/persons', (req, res) => {
     res.json(persons)
