@@ -24,7 +24,6 @@ let persons = [
     }
 ]
 
-morgan('tiny')
 app.use(express.json())
 
 const getDateNow = () => {
@@ -84,16 +83,20 @@ app.post('/api/persons', (req, res) => {
     }
     if (persons.find(person => person.name === body.name)) return res.status(400).json({
         error: "person already exists"
-    }) 
-    const person = {
-        id: generateId(),
-        name: body.name,
-        number: body.number,
+    })
+    else {
+
+    
+        const person = {
+            id: generateId(),
+            name: body.name,
+            number: body.number,
         }
 
-    persons = persons.concat(person)
+        persons = persons.concat(person)
 
-    res.json(person)
+        res.json(person)
+    }
     
 })
 
