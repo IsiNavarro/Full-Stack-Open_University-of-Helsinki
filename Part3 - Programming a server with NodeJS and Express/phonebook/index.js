@@ -24,10 +24,17 @@ let persons = [
     }
 ]
 
+morgan('tiny')
+app.use(express.json())
+
 const getDateNow = () => {
     const now = Date.now()
     const nowDate = new Date(now)
     return nowDate.toUTCString()
+}
+
+const generateId = () => {
+    return String(Date.now() + Math.random())
 }
 
 app.get('/info', (req, res) => {
@@ -50,7 +57,7 @@ app.get('/api/persons/:id', (req, res) => {
     const person = persons.find(person => person.id === id)
 
     if (!person) {
-        return res.status(404).send({
+        return res.status(404).json({
             error: 'person not found'
         })
     } 
@@ -65,6 +72,29 @@ app.delete('/api/persons/:id', (req, res) => {
     persons = persons.filter(person => person.id != id)
 
     res.status(204).end()
+})
+
+app.post('/api/persons', (req, res) => {
+    const body = req.body
+
+    if (!body.name || !body.number) {
+        return res.status(400).json({
+            error: "content missing"
+        })
+    }
+    if (persons.find(person => person.name === body.name)) return res.status(400).json({
+        error: "person already exists"
+    }) 
+    const person = {
+        id: generateId(),
+        name: body.name,
+        number: body.number,
+        }
+
+    persons = persons.concat(person)
+
+    res.json(person)
+    
 })
 
 const PORT = 3001
