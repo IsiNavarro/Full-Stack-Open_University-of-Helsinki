@@ -81,7 +81,7 @@ const App = () => {
     }).catch(error => setMessageTimed('Error deleting person from the server!', false))
   }
 
-  const personsToShow = persons.filter((person) => person.name.toLowerCase().includes(filterString))
+  const personsToShow = persons.filter((person) => person.name.toLowerCase().includes(filterString.toLowerCase()))
 
 
   return (
