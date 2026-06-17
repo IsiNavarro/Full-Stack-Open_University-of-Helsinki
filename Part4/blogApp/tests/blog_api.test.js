@@ -53,6 +53,15 @@ test('a valid blog can be added', async () => {
     assert(authors.includes("new Author"))
 })
 
+test('identifier is called id and not _id', async () => {
+    const response = await api.get('/api/blogs')
+    console.log('RESPONSE BODY:', response.body)
+
+    const sampleBlog = response.body[0]
+    assert(Object.hasOwn(sampleBlog, 'id'))
+    assert(!Object.hasOwn(sampleBlog, '_id'))
+})
+
 after(async () => {
     await mongoose.connection.close()
 })
