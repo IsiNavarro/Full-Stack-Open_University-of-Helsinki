@@ -55,11 +55,27 @@ test('a valid blog can be added', async () => {
 
 test('identifier is called id and not _id', async () => {
     const response = await api.get('/api/blogs')
-    console.log('RESPONSE BODY:', response.body)
 
     const sampleBlog = response.body[0]
     assert(Object.hasOwn(sampleBlog, 'id'))
     assert(!Object.hasOwn(sampleBlog, '_id'))
+})
+
+test('blog without likes is not added', async () => {
+  const newBlog = {
+    title: "new Title",
+    author: "new Author",
+    url: "new URL"
+
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+
+
+  assert.strictEqual(response.body.likes, 0)
 })
 
 after(async () => {
