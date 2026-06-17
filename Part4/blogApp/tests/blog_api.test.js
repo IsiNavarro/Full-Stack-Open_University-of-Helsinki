@@ -61,7 +61,7 @@ test('identifier is called id and not _id', async () => {
     assert(!Object.hasOwn(sampleBlog, '_id'))
 })
 
-test('blog without likes is not added', async () => {
+test('blog without likes defaults to likes: 0', async () => {
   const newBlog = {
     title: "new Title",
     author: "new Author",
@@ -76,6 +76,27 @@ test('blog without likes is not added', async () => {
 
 
   assert.strictEqual(response.body.likes, 0)
+})
+
+test('blog without author or wihout title is not added', async () => {
+    const blogWithoutAuthor = {
+        title: "this Title",
+        url: "this URL"
+    }
+
+    const blogWithoutTitle = {
+        author: "this Author",
+        url: "this URL"
+    }
+
+    await api
+        .post('/api/blogs')
+        .expect(400)
+
+    const response = await api.get('/api/blogs')
+
+    assert.strictEqual(response.body.length, helper.initialBlogs.length)
+
 })
 
 after(async () => {
