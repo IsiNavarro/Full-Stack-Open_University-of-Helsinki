@@ -91,6 +91,12 @@ test('blog without author or wihout title is not added', async () => {
 
     await api
         .post('/api/blogs')
+        .send(blogWithoutAuthor)
+        .expect(400)
+
+    await api
+        .post('/api/blogs')
+        .send(blogWithoutTitle)
         .expect(400)
 
     const response = await api.get('/api/blogs')
@@ -116,6 +122,22 @@ test('a blog can be deleted', async () => {
 
     const titles = blogsAtEnd.map(r => r.title)
     assert(!titles.includes(blogToDelete.title))
+})
+
+test('a blog can be updated with only the likes property', async () => {
+    const response = await api.get('/api/blogs')
+    const blogToUpdate = response.body[0]
+
+    const likes = { likes: 99 }
+
+    const resultResponse = await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send(likes)
+        .expect(200)
+
+    assert.strictEqual(resultResponse.body.likes, 99)
+    assert.strictEqual(resultResponse.body.title, blogToUpdate.title)
+    assert.strictEqual(resultResponse.body.author, blogToUpdate.author)
 })
 
 after(async () => {
