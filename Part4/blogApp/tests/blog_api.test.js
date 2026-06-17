@@ -99,6 +99,25 @@ test('blog without author or wihout title is not added', async () => {
 
 })
 
+test('a blog can be deleted', async () => {
+    const initialResponse = await api.get('/api/blogs')
+    const blogsAtStart = initialResponse.body
+    const blogToDelete = blogsAtStart[0] 
+
+    await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(204)
+
+
+    const finalResponse = await api.get('/api/blogs')
+    const blogsAtEnd = finalResponse.body
+
+    assert.strictEqual(blogsAtEnd.length, blogsAtStart.length - 1)
+
+    const titles = blogsAtEnd.map(r => r.title)
+    assert(!titles.includes(blogToDelete.title))
+})
+
 after(async () => {
     await mongoose.connection.close()
 })
