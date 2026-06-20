@@ -21,3 +21,19 @@ Content-Type: application/json
     "password": "123454321"
 
 }
+###
+POST http://localhost:3003/api/login
+Content-Type:  application/json
+
+{
+    "username": "MaxIsNOTCool",
+    "password": "543212345"
+}
+###
+POST http://localhost:3003/api/login
+Content-Type:  application/json
+
+{
+    "username": "MaxIsCool777",
+    "password": "123454321"
+}
