@@ -10,3 +10,14 @@ Content-Type: application/json
     "url": "SomeURL",
     "likes": 13
 }
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "MaxIsCool777",
+    "name": "Max",
+    "password": "123454321"
+
+}
