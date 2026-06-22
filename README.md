@@ -29,7 +29,7 @@ Coursework repository for [Full Stack Open](https://fullstackopen.com/en/), a mo
 | [Part 2](./part2-communicating-with-server) | Communicating with a Server | Complete | — |
 | [Part 3](./part3-node-express-mongodb) | Node.js, Express & MongoDB | Complete | [Phonebook App ↗](https://phonebook-fullstack-open-3bvu.onrender.com) |
 | [Part 4](./part4-testing-user-auth) | Testing & User Authentication | Complete | — |
-| [Part 5](./part5-testing-react) | Testing, React Router & UI Frameworks | 🔄 In Progress | — |
+| [Part 5](./part5-testing-react) | Testing, React Router & UI Frameworks | In Progress | — |
 
 ---
 
