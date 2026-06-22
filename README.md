@@ -1,6 +1,6 @@
 # Full Stack Open — University of Helsinki
 
-Coursework repository for [Full Stack Open](https://fullstackopen.com/en/), a modern fullstack web development programme by the University of Helsinki. The course covers the complete stack: React, Node.js, Express, MongoDB, REST APIs, backend testing, and JWT authentication.
+Coursework repository for [Full Stack Open](https://fullstackopen.com/en/), a modern fullstack web development programme by the University of Helsinki. The course covers the complete stack: React, Node.js, Express v5, MongoDB, REST APIs, backend and frontend testing, JWT authentication, and client-side routing with React Router.
 
 **Status:** Parts 0–4 complete · Part 5 in progress
 
@@ -10,10 +10,11 @@ Coursework repository for [Full Stack Open](https://fullstackopen.com/en/), a mo
 
 | Area | Technologies |
 |---|---|
-| Frontend | React, JavaScript (ES6+), HTML5, CSS3 |
-| Backend | Node.js, Express |
+| Frontend | React, React Router, Axios, JavaScript (ES6+), HTML5, CSS3 |
+| Backend | Node.js v22, Express v5 |
 | Database | MongoDB, Mongoose |
-| Testing | Jest, Supertest, React Testing Library |
+| Authentication | JSON Web Tokens, bcrypt |
+| Testing | Node:test, React Testing Library, Playwright |
 | Deployment | Render |
 | Tooling | Git, ESLint |
 
@@ -28,7 +29,7 @@ Coursework repository for [Full Stack Open](https://fullstackopen.com/en/), a mo
 | [Part 2](./part2-communicating-with-server) | Communicating with a Server | Complete | — |
 | [Part 3](./part3-node-express-mongodb) | Node.js, Express & MongoDB | Complete | [Phonebook App ↗](https://phonebook-fullstack-open-3bvu.onrender.com) |
 | [Part 4](./part4-testing-user-auth) | Testing & User Authentication | Complete | — |
-| [Part 5](./part5-testing-react) | Testing React Apps | In Progress | — |
+| [Part 5](./part5-testing-react) | Testing, React Router & UI Frameworks | 🔄 In Progress | — |
 
 ---
 
