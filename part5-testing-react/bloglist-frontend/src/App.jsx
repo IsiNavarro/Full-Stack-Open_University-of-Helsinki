@@ -7,7 +7,6 @@ import LoginForm from './components/LoginForm'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
-
   const [user, setUser] = useState(null)
 
   //New Blog state
@@ -15,12 +14,14 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
+  // Get All Blogs
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
   }, [])
 
+  // Check localStorage for logged user
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
@@ -42,6 +43,7 @@ const handleLoginSuccess = (loggedUser) => {
     event.preventDefault()
 
     window.localStorage.removeItem('loggedBlogAppUser')
+    blogService.setToken(null)
     setUser(null)
   }
 
