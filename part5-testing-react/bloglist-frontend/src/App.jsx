@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
-import loginService from './services/login'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+
   const [user, setUser] = useState(null)
 
   //New Blog state
@@ -31,25 +30,12 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-
-    try {
-      const user = await loginService.login({username, password})
-      setUser(user)
-      window.localStorage.setItem(
-        'loggedBlogAppUser', JSON.stringify(user)
-      )
-      blogService.setToken(user.token)
-      setUsername('')
-      setPassword('')
-
-    } catch  {
-      setErrorMessage('wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    }
+const handleLoginSuccess = (loggedUser) => {
+    setUser(loggedUser)
+    blogService.setToken(loggedUser.token)
+    window.localStorage.setItem(
+      'loggedBlogAppUser', JSON.stringify(loggedUser)
+    )
   }
 
   const handleLogout = (event) => {
@@ -83,32 +69,6 @@ const App = () => {
         setErrorMessage(null)
       }, 5000)
     }
-  }
-
-  const loginForm = () => {
-    return <form onSubmit={handleLogin}>
-      <div>
-        <label>
-          username
-          <input
-            type="text"
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
-          password
-          <input
-            type="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </label>
-      </div>
-      <button type="submit">login</button>
-    </form>
   }
 
   const blogForm = () => (
@@ -153,7 +113,7 @@ const App = () => {
       <div>
         <Notification message={errorMessage} />
         <h2>Log in to application</h2>
-        {loginForm()}
+        <LoginForm onLoginSuccess={handleLoginSuccess} onError={setErrorMessage}/>
       </div>
     )
   }
