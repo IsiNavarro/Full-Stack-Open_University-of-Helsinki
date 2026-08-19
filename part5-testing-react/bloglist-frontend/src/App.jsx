@@ -3,16 +3,12 @@ import blogService from './services/blogs'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
-
-  //New Blog state
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
 
   // Get All Blogs
   useEffect(() => {
@@ -31,7 +27,7 @@ const App = () => {
     }
   }, [])
 
-const handleLoginSuccess = (loggedUser) => {
+  const handleLoginSuccess = (loggedUser) => {
     setUser(loggedUser)
     blogService.setToken(loggedUser.token)
     window.localStorage.setItem(
@@ -47,24 +43,18 @@ const handleLoginSuccess = (loggedUser) => {
     setUser(null)
   }
 
-  const addBlog = async (event) => {
+  const addBlog = async (newBlogObject) => {
     event.preventDefault()
 
     try {
-      const newBlog = await blogService.create({
-        title,
-        author,
-        url
-      })
+      const newBlog = await blogService.create(newBlogObject)
 
       setBlogs(blogs.concat(newBlog))
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      setErrorMessage(`New Blog added: ${title}`)
+
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000);
+
     } catch {
       setErrorMessage('Failed to add blog')
       setTimeout(() => {
@@ -72,37 +62,7 @@ const handleLoginSuccess = (loggedUser) => {
       }, 5000)
     }
   }
-
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <div>
-        title:
-        <input
-          type="text"
-          value={title}
-          onChange={({ target }) => setTitle(target.value)}
-        />
-      </div>
-      <div>
-        author:
-        <input
-          type="text"
-          value={author}
-          onChange={({ target }) => setAuthor(target.value)}
-        />
-      </div>
-      <div>
-        url:
-        <input
-          type="text"
-          value={url}
-          onChange={({ target }) => setUrl(target.value)}
-        />
-      </div>
-      <button type="submit">create</button>
-    </form>
-  )
-
+  
   const userInfo = () => {
     return <div>
       {user.name} logged in
@@ -128,7 +88,7 @@ const handleLoginSuccess = (loggedUser) => {
       {user && userInfo()}
 
       <h2>create new</h2>
-      {blogForm()}
+      <BlogForm addBlog={addBlog}/>
 
       <BlogList blogs={blogs}/>
       
