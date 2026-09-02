@@ -1,6 +1,6 @@
 import Toggable from './Toggable'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlog }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -13,7 +13,15 @@ const Blog = ({ blog }) => {
   const handleLike = (event) => {
     event.preventDefault()
 
-    console.log('like clicked')
+    const updatedBlog = {
+      user: blog.user.id,
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url
+    }
+
+    updateBlog(blog.id, updatedBlog)
   }
 
   return (
