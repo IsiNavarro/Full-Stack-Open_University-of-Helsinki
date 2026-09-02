@@ -1,6 +1,6 @@
 import Toggable from './Toggable'
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, updateBlog, handleDeleteBlog }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -24,6 +24,13 @@ const Blog = ({ blog, updateBlog }) => {
     updateBlog(blog.id, updatedBlog)
   }
 
+  const handleDelete = (event) => {
+    event.preventDefault()
+    if (window.confirm(`Remove blog "${blog.title}" by ${blog.author}?`)) {
+      handleDeleteBlog(blog.id)
+    }    
+  }
+
   return (
   <div style={blogStyle}>
     <div>{blog.title} {blog.author}</div>
@@ -31,6 +38,7 @@ const Blog = ({ blog, updateBlog }) => {
       <div>{blog.url}</div>
       <div>{blog.likes} <button onClick={handleLike}>like</button></div>
       <div>{blog.user.username}</div>
+      <div><button onClick={handleDelete}>delete</button></div>
     </Toggable>
   </div> )
 }

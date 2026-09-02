@@ -92,6 +92,19 @@ const App = () => {
   }
 }
 
+const handleDeleteBlog = async id => {
+  try {
+    await blogService.remove(id)
+    setBlogs(blogs.filter(blog => blog.id !== id))
+    setErrorMessage('Blog removed')
+    setTimeout(() => setErrorMessage(null), 5000)
+  } catch (exception) {
+    const message = exception.response?.data?.error || 'Removing the blog failed'
+    setErrorMessage(message)
+    setTimeout(() => setErrorMessage(null), 5000)
+  }
+}
+
   return (
     <div>
       <Notification message={errorMessage} />
@@ -105,7 +118,7 @@ const App = () => {
       </Togglable>
       
 
-      <BlogList blogs={blogs} handleUpdateBlog={handleUpdateBlog}/> 
+      <BlogList blogs={blogs} handleUpdateBlog={handleUpdateBlog} handleDeleteBlog={handleDeleteBlog}/> 
       
     </div>
   )
