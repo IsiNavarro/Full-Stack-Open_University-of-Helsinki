@@ -28,20 +28,20 @@ const Blog = ({ blog, updateBlog, handleDeleteBlog }) => {
     event.preventDefault()
     if (window.confirm(`Remove blog "${blog.title}" by ${blog.author}?`)) {
       handleDeleteBlog(blog.id)
-    }    
+    }
   }
 
   return (
-  <div style={blogStyle}>
-    <div>{blog.title} {blog.author}</div>
-    <Toggable buttonLabel='view' buttonLabelTwo='hide'>
-      <div>{blog.url}</div>
-      <div>{blog.likes} <button onClick={handleLike}>like</button></div>
-      <div>{blog.user.username}</div>
-      <div><button onClick={handleDelete}>delete</button></div>
-    </Toggable>
-  </div> )
+    <div style={blogStyle}>
+      <div>{blog.title} {blog.author}</div>
+      <Toggable buttonLabel='view' buttonLabelTwo='hide'>
+        <div>{blog.url}</div>
+        <div>{blog.likes} <button onClick={handleLike}>like</button></div>
+        <div>{blog.user.username}</div>
+        <div><button onClick={handleDelete}>delete</button></div>
+      </Toggable>
+    </div> )
 }
-  
+
 
 export default Blog

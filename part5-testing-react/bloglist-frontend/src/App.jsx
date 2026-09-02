@@ -15,7 +15,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   // Check localStorage for logged user
@@ -54,7 +54,7 @@ const App = () => {
 
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000);
+      }, 5000)
 
     } catch {
       setErrorMessage('Failed to add blog')
@@ -82,44 +82,44 @@ const App = () => {
   }
 
   const handleUpdateBlog = async (id, updatedBlog) => {
-  try {
-    const returnedBlog = await blogService.update(id, updatedBlog)
-    setBlogs(blogs.map(blog =>
-      (blog.id === id) ? returnedBlog : blog
-    ))
-  } catch (exception) {
-    console.log(exception)
+    try {
+      const returnedBlog = await blogService.update(id, updatedBlog)
+      setBlogs(blogs.map(blog =>
+        (blog.id === id) ? returnedBlog : blog
+      ))
+    } catch (exception) {
+      console.log(exception)
+    }
   }
-}
 
-const handleDeleteBlog = async id => {
-  try {
-    await blogService.remove(id)
-    setBlogs(blogs.filter(blog => blog.id !== id))
-    setErrorMessage('Blog removed')
-    setTimeout(() => setErrorMessage(null), 5000)
-  } catch (exception) {
-    const message = exception.response?.data?.error || 'Removing the blog failed'
-    setErrorMessage(message)
-    setTimeout(() => setErrorMessage(null), 5000)
+  const handleDeleteBlog = async id => {
+    try {
+      await blogService.remove(id)
+      setBlogs(blogs.filter(blog => blog.id !== id))
+      setErrorMessage('Blog removed')
+      setTimeout(() => setErrorMessage(null), 5000)
+    } catch (exception) {
+      const message = exception.response?.data?.error || 'Removing the blog failed'
+      setErrorMessage(message)
+      setTimeout(() => setErrorMessage(null), 5000)
+    }
   }
-}
 
   return (
     <div>
       <Notification message={errorMessage} />
-      
+
       <h2>blogs</h2>
-      
+
       {user && userInfo()}
 
       <Togglable buttonLabel='create new blog'>
         <BlogForm addBlog={addBlog}/>
       </Togglable>
-      
 
-      <BlogList blogs={blogs} handleUpdateBlog={handleUpdateBlog} handleDeleteBlog={handleDeleteBlog}/> 
-      
+
+      <BlogList blogs={blogs} handleUpdateBlog={handleUpdateBlog} handleDeleteBlog={handleDeleteBlog}/>
+
     </div>
   )
 }

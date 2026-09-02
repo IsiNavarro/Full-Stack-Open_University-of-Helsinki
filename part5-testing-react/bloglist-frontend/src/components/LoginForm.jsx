@@ -1,14 +1,14 @@
-import { useState } from "react"
+import { useState } from 'react'
 import loginService from '../services/login'
 
 const LoginForm = ({
-    onLoginSuccess,
-    onError
-  }) => {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+  onLoginSuccess,
+  onError
+}) => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
-    const handleUsernameChange = (event) => {
+  const handleUsernameChange = (event) => {
     setUsername(event.target.value)
   }
   const handlePasswordChange = (event) => {
@@ -29,29 +29,29 @@ const LoginForm = ({
   }
 
 
-    return <form onSubmit={handleLogin}>
-      <div>
-        <label>
+  return <form onSubmit={handleLogin}>
+    <div>
+      <label>
           username
-          <input
-            type="text"
-            value={username}
-            onChange={handleUsernameChange}
-          />
-        </label>
-      </div>
-      <div>
-        <label>
+        <input
+          type="text"
+          value={username}
+          onChange={handleUsernameChange}
+        />
+      </label>
+    </div>
+    <div>
+      <label>
           password
-          <input
-            type="password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </label>
-      </div>
-      <button type="submit">login</button>
-    </form>
-  }
+        <input
+          type="password"
+          value={password}
+          onChange={handlePasswordChange}
+        />
+      </label>
+    </div>
+    <button type="submit">login</button>
+  </form>
+}
 
-  export default LoginForm
+export default LoginForm
