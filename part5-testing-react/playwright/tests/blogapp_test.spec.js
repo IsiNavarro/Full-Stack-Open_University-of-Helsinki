@@ -39,4 +39,25 @@ describe('Blog app', () => {
       await expect(page.getByText('testName logged in')).not.toBeVisible()
     })
   })
+  describe('When logged in', () => {
+    beforeEach(async ({ page }) => {
+      await page.getByLabel('username').fill('test_username')
+      await page.getByLabel('password').fill('test_password')
+      await page.getByRole('button', { name: 'login' }).click()
+      await expect(page.getByText('testName logged in')).toBeVisible()
+    })
+
+    test('a new blog can be created', async ({ page }) => {
+      await page.getByRole('button', { name: 'new blog' }).click()
+
+      await page.getByPlaceholder('write title here').fill('Test_title')
+      await page.getByPlaceholder('write author here').fill('Test_author')
+      await page.getByPlaceholder('write url here').fill('test_url.com')
+      await page.getByRole('button', { name: 'create', exact: true }).click()
+
+      const blogSummary = page.locator('.blog-summary')
+      await expect(blogSummary).toContainText('Test_title')
+      await expect(blogSummary).toContainText('Test_author')
+  })
+})
 })
