@@ -78,6 +78,20 @@ describe('Blog app', () => {
           await page.getByRole('button', { name: 'like' }).click()
           await expect(likes).toContainText('1')
         })
+        test('the user who added the blog can delete it', async ({ page }) => {
+          page.on('dialog', async (dialog) => {
+            expect(dialog.type()).toBe('confirm')
+            expect(dialog.message()).toContain('Remove blog "Blog to be liked" by test_author?')
+            await dialog.accept()
+          })
+
+          await page.getByRole('button', { name: 'view' }).click()
+          await page.getByRole('button', { name: 'delete' }).click()
+
+          await expect(
+            page.locator('.blog-summary').filter({ hasText: 'Blog to be liked' })
+          ).toHaveCount(0)
+        })
       })
   
 })
