@@ -114,6 +114,51 @@ describe('Blog app', () => {
           await expect(page.getByRole('button', { name: 'delete' })).not.toBeVisible()
         })
       })
-  
-})
+      describe('and several blogs exist', () => {
+      beforeEach(async ({ page, request }) => {
+        const loginResponse = await request.post('http://localhost:3003/api/login', {
+          data: { username: 'test_username', password: 'test_password' },
+        })
+        const { token } = await loginResponse.json()
+
+        const blogs = [
+          { title: 'Blog with one like', author: 'Author A', url: 'a.com' },
+          { title: 'Blog with three likes', author: 'Author B', url: 'b.com' },
+          { title: 'Blog with two likes', author: 'Author C', url: 'c.com' },
+        ]
+
+        for (const blog of blogs) {
+          await request.post('http://localhost:3003/api/blogs', {
+            data: blog,
+            headers: { Authorization: `Bearer ${token}` },
+          })
+        }
+
+        await page.reload()
+        await expect(page.locator('.blog-summary')).toHaveCount(3)
+      })
+
+      test('blogs are ordered by likes, most liked first', async ({ page }) => {
+        const likeBlog = async (title, times) => {
+          const blog = page.locator('.blog').filter({ hasText: title })
+          await blog.getByRole('button', { name: 'view' }).click()
+
+          for (let i = 1; i <= times; i++) {
+            await blog.getByRole('button', { name: 'like' }).click()
+            await expect(blog.locator('.blog-likes')).toHaveText(`${i} like`)
+          }
+        }
+
+        await likeBlog('Blog with one like', 1)
+        await likeBlog('Blog with three likes', 3)
+        await likeBlog('Blog with two likes', 2)
+
+        await expect(page.locator('.blog-summary')).toHaveText([
+          /Blog with three likes/,
+          /Blog with two likes/,
+          /Blog with one like/,
+        ])
+      })
+    })
+})  
 })
