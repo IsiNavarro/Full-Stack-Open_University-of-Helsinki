@@ -92,6 +92,27 @@ describe('Blog app', () => {
             page.locator('.blog-summary').filter({ hasText: 'Blog to be liked' })
           ).toHaveCount(0)
         })
+        test('only the user who added the blog sees the delete button', async ({ page, request }) => {
+          await page.getByRole('button', { name: 'view' }).click()
+          await expect(page.getByRole('button', { name: 'delete' })).toBeVisible()
+
+          await request.post('http://localhost:3003/api/users', {
+            data: {
+              name: 'otherName',
+              username: 'other_username',
+              password: 'other_password',
+            },
+          })
+
+          await page.getByRole('button', { name: 'logout' }).click()
+          await page.getByLabel('username').fill('other_username')
+          await page.getByLabel('password').fill('other_password')
+          await page.getByRole('button', { name: 'login' }).click()
+          await expect(page.getByText('otherName logged in')).toBeVisible()
+
+          await page.getByRole('button', { name: 'view' }).click()
+          await expect(page.getByRole('button', { name: 'delete' })).not.toBeVisible()
+        })
       })
   
 })

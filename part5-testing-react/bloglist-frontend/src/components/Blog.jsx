@@ -1,6 +1,6 @@
 import Toggable from './Toggable'
 
-const Blog = ({ blog, updateBlog, handleDeleteBlog }) => {
+const Blog = ({ blog, updateBlog, handleDeleteBlog, user }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -9,6 +9,8 @@ const Blog = ({ blog, updateBlog, handleDeleteBlog }) => {
     borderWidth: 1,
     marginBottom: 5
   }
+
+  const isCreator = user && blog.user && blog.user.username === user.username
 
   const handleLike = (event) => {
     event.preventDefault()
@@ -39,7 +41,9 @@ const Blog = ({ blog, updateBlog, handleDeleteBlog }) => {
           <div className="blog-url">{blog.url}</div>
           <div className="blog-likes">{blog.likes} <button onClick={handleLike}>like</button></div>
           <div>{blog.user.username}</div>
-          <div><button onClick={handleDelete}>delete</button></div>
+          {isCreator && (
+            <div><button onClick={handleDelete}>delete</button></div>
+          )}
         </div>
       </Toggable>
     </div> )
