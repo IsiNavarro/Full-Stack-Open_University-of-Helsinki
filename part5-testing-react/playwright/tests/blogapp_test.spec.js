@@ -59,5 +59,26 @@ describe('Blog app', () => {
       await expect(blogSummary).toContainText('Test_title')
       await expect(blogSummary).toContainText('Test_author')
   })
+    describe('and a blog exists', () => {
+        beforeEach(async ({ page }) => {
+          await page.getByRole('button', { name: 'new blog' }).click()
+          await page.getByPlaceholder('write title here').fill('Blog to be liked')
+          await page.getByPlaceholder('write author here').fill('test_author')
+          await page.getByPlaceholder('write url here').fill('test_url.com')
+          await page.getByRole('button', { name: 'create', exact: true }).click()
+          await expect(page.locator('.blog-summary')).toContainText('Blog to be liked')
+        })
+
+        test('a blog can be liked', async ({ page }) => {
+          await page.getByRole('button', { name: 'view' }).click()
+
+          const likes = page.locator('.blog-likes')
+          await expect(likes).toContainText('0')
+
+          await page.getByRole('button', { name: 'like' }).click()
+          await expect(likes).toContainText('1')
+        })
+      })
+  
 })
 })
