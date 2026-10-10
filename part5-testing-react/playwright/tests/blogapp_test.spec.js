@@ -70,13 +70,13 @@ describe('Blog app', () => {
         })
 
         test('a blog can be liked', async ({ page }) => {
-          await page.getByRole('button', { name: 'view' }).click()
+          await page.getByRole('link', { name: 'Blog to be liked' }).click()
 
           const likes = page.locator('.blog-likes')
-          await expect(likes).toContainText('0')
+          await expect(likes).toContainText('0 likes')
 
           await page.getByRole('button', { name: 'like' }).click()
-          await expect(likes).toContainText('1')
+          await expect(likes).toContainText('1 likes')
         })
         test('the user who added the blog can delete it', async ({ page }) => {
           page.on('dialog', async (dialog) => {
@@ -85,7 +85,7 @@ describe('Blog app', () => {
             await dialog.accept()
           })
 
-          await page.getByRole('button', { name: 'view' }).click()
+          await page.getByRole('link', { name: 'Blog to be liked' }).click()
           await page.getByRole('button', { name: 'delete' }).click()
 
           await expect(
@@ -93,7 +93,7 @@ describe('Blog app', () => {
           ).toHaveCount(0)
         })
         test('only the user who added the blog sees the delete button', async ({ page, request }) => {
-          await page.getByRole('button', { name: 'view' }).click()
+          await page.getByRole('link', { name: 'Blog to be liked' }).click()
           await expect(page.getByRole('button', { name: 'delete' })).toBeVisible()
 
           await request.post('http://localhost:3003/api/users', {
@@ -110,7 +110,8 @@ describe('Blog app', () => {
           await page.getByRole('button', { name: 'login' }).click()
           await expect(page.getByText('otherName logged in')).toBeVisible()
 
-          await page.getByRole('button', { name: 'view' }).click()
+          await page.getByRole('link', { name: 'blogs', exact: true }).click()
+          await page.getByRole('link', { name: 'Blog to be liked' }).click()
           await expect(page.getByRole('button', { name: 'delete' })).not.toBeVisible()
         })
       })
@@ -139,14 +140,18 @@ describe('Blog app', () => {
       })
 
       test('blogs are ordered by likes, most liked first', async ({ page }) => {
-        const likeBlog = async (title, times) => {
-          const blog = page.locator('.blog').filter({ hasText: title })
-          await blog.getByRole('button', { name: 'view' }).click()
+        test.setTimeout(10000)
 
+        const likeBlog = async (title, times) => {
+          await page.getByRole('link', { name: title }).click()
+
+          const likes = page.locator('.blog-likes')
           for (let i = 1; i <= times; i++) {
-            await blog.getByRole('button', { name: 'like' }).click()
-            await expect(blog.locator('.blog-likes')).toHaveText(`${i} like`)
+            await page.getByRole('button', { name: 'like' }).click()
+            await expect(likes).toContainText(`${i} likes`)
           }
+
+          await page.getByRole('link', { name: 'blogs', exact: true }).click()
         }
 
         await likeBlog('Blog with one like', 1)
