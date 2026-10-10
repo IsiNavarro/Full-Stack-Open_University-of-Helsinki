@@ -4,13 +4,19 @@ import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
+import BlogView from './components/BlogView'
 
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Link, useMatch, Navigate } from 'react-router-dom'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState(null)
   const [user, setUser] = useState(null)
+
+  const match = useMatch('/blogs/:id')
+  const blog = match
+    ? blogs.find(blog => blog.id === match.params.id)
+    : null
 
   // Get All Blogs
   useEffect(() => {
@@ -65,22 +71,6 @@ const App = () => {
     }
   }
 
-  const userInfo = () => {
-    return <div>
-      {user.name} logged in
-      <button onClick={handleLogout}>logout</button>
-    </div>
-  }
-
-  if (user === null) {
-    return (
-      <div>
-        <Notification message={errorMessage} />
-        <h2>Log in to application</h2>
-        <LoginForm onLoginSuccess={handleLoginSuccess} onError={setErrorMessage}/>
-      </div>
-    )
-  }
 
   const handleUpdateBlog = async (id, updatedBlog) => {
     try {
@@ -111,24 +101,44 @@ const App = () => {
   }
   return (
     <div>
-      <nav>
+      <div>
         <Link style={padding} to="/">blogs</Link>
-        <Link style={padding} to="/create">create new</Link>
-      </nav>
+        {user && <Link style={padding} to="/create">create new</Link>}
+        {user && (
+          <span>
+            {user.name} logged in
+            <button onClick={handleLogout}>logout</button>
+          </span>
+        )}
+      </div>
 
       <Notification message={errorMessage} />
 
-      <h2>blogs</h2>
-
-      {user && userInfo()}
+      {!user && (
+        <div>
+          <h2>Log in to application</h2>
+          <LoginForm onLoginSuccess={handleLoginSuccess} onError={setErrorMessage} />
+        </div>
+      )}
 
       <Routes>
-        <Route path='/' element={
-          <BlogList blogs={blogs} user={user} handleUpdateBlog={handleUpdateBlog} handleDeleteBlog={handleDeleteBlog}/>
-        }/>
-        <Route path='create' element={
-          <BlogForm addBlog={addBlog}/>
-        }/>
+        <Route path="/" element={
+          <div>
+            <h2>blogs</h2>
+            <BlogList blogs={blogs} />
+          </div>
+        } />
+        <Route path="/blogs/:id" element={
+          <BlogView
+            blog={blog}
+            user={user}
+            updateBlog={handleUpdateBlog}
+            handleDeleteBlog={handleDeleteBlog}
+          />
+        } />
+        <Route path="/create" element={
+          user ? <BlogForm addBlog={addBlog} /> : <Navigate replace to="/" />
+        } />
       </Routes>
     </div>
   )
