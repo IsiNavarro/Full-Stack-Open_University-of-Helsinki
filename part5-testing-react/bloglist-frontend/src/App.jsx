@@ -52,22 +52,16 @@ const App = () => {
   }
 
   const addBlog = async (newBlogObject) => {
-    event.preventDefault()
-
     try {
       const newBlog = await blogService.create(newBlogObject)
-
       setBlogs(blogs.concat(newBlog))
-
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-
+      return true
     } catch {
       setErrorMessage('Failed to add blog')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
+      return false
     }
   }
 

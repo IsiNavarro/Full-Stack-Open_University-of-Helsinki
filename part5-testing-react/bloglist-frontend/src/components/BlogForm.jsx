@@ -8,17 +8,19 @@ const BlogForm = ({ addBlog }) => {
   const [url, setUrl] = useState('')
   const navigate = useNavigate()
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
-    addBlog({ title, author, url })
+    const success = await addBlog({ title, author, url })
 
-    setTitle('')
-    setAuthor('')
-    setUrl('')
-    navigate('/')
-
+    if (success) {
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      navigate('/')
+    }
   }
+
 
   return (
     <form onSubmit={handleSubmit}>
