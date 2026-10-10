@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
 import BlogForm from './BlogForm'
 
@@ -6,7 +7,11 @@ test('<BlogForm /> calls addBlog with the right details when a blog is created',
   const addBlog = vi.fn()
   const user = userEvent.setup()
 
-  render(<BlogForm addBlog={addBlog} />)
+  render(
+    <MemoryRouter>
+      <BlogForm addBlog={addBlog} />
+    </MemoryRouter>
+  )
 
   const titleInput = screen.getByPlaceholderText('write title here')
   const authorInput = screen.getByPlaceholderText('write author here')

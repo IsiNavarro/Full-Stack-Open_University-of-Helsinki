@@ -48,7 +48,7 @@ describe('Blog app', () => {
     })
 
     test('a new blog can be created', async ({ page }) => {
-      await page.getByRole('button', { name: 'new blog' }).click()
+      await page.getByRole('link', { name: 'create new' }).click()
 
       await page.getByPlaceholder('write title here').fill('Test_title')
       await page.getByPlaceholder('write author here').fill('Test_author')
@@ -61,7 +61,7 @@ describe('Blog app', () => {
   })
     describe('and a blog exists', () => {
         beforeEach(async ({ page }) => {
-          await page.getByRole('button', { name: 'new blog' }).click()
+          await page.getByRole('link', { name: 'create new' }).click()
           await page.getByPlaceholder('write title here').fill('Blog to be liked')
           await page.getByPlaceholder('write author here').fill('test_author')
           await page.getByPlaceholder('write url here').fill('test_url.com')

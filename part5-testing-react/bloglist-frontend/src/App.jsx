@@ -4,7 +4,8 @@ import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
-import Togglable from './components/Toggable'
+
+import { Routes, Route, Link } from 'react-router-dom'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -105,21 +106,30 @@ const App = () => {
     }
   }
 
+  const padding = {
+    padding: 5
+  }
   return (
     <div>
+      <nav>
+        <Link style={padding} to="/">blogs</Link>
+        <Link style={padding} to="/create">create new</Link>
+      </nav>
+
       <Notification message={errorMessage} />
 
       <h2>blogs</h2>
 
       {user && userInfo()}
 
-      <Togglable buttonLabel='create new blog'>
-        <BlogForm addBlog={addBlog}/>
-      </Togglable>
-
-
-      <BlogList blogs={blogs} user={user} handleUpdateBlog={handleUpdateBlog} handleDeleteBlog={handleDeleteBlog}/>
-
+      <Routes>
+        <Route path='/' element={
+          <BlogList blogs={blogs} user={user} handleUpdateBlog={handleUpdateBlog} handleDeleteBlog={handleDeleteBlog}/>
+        }/>
+        <Route path='create' element={
+          <BlogForm addBlog={addBlog}/>
+        }/>
+      </Routes>
     </div>
   )
 }

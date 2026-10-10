@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const BlogForm = ({ addBlog }) => {
   //New Blog state
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const navigate = useNavigate()
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -14,6 +16,8 @@ const BlogForm = ({ addBlog }) => {
     setTitle('')
     setAuthor('')
     setUrl('')
+    navigate('/')
+
   }
 
   return (
