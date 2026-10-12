@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { TextField, Button, Stack } from '@mui/material'
 import loginService from '../services/login'
 
 const LoginForm = ({
@@ -29,29 +30,32 @@ const LoginForm = ({
   }
 
 
-  return <form onSubmit={handleLogin}>
-    <div>
-      <label>
-          username
-        <input
-          type="text"
+  return (
+    <form onSubmit={handleLogin}>
+      <Stack spacing={2} sx={{ maxWidth: 250, alignItems: 'flex-start' }}>
+        <TextField
+          id="username"
+          label="username"
+          variant="standard"
+          fullWidth
           value={username}
           onChange={handleUsernameChange}
         />
-      </label>
-    </div>
-    <div>
-      <label>
-          password
-        <input
+        <TextField
+          id="password"
+          label="password"
           type="password"
+          variant="standard"
+          fullWidth
           value={password}
           onChange={handlePasswordChange}
         />
-      </label>
-    </div>
-    <button type="submit">login</button>
-  </form>
+        <Button variant="contained" type="submit">
+          login
+        </Button>
+      </Stack>
+    </form>
+  )
 }
 
 export default LoginForm
