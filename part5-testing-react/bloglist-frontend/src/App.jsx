@@ -7,10 +7,11 @@ import BlogForm from './components/BlogForm'
 import BlogView from './components/BlogView'
 
 import { Routes, Route, Link, useMatch, Navigate } from 'react-router-dom'
+import { AppBar, Toolbar, Typography, Button, Container } from '@mui/material'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [notification, setNotification] = useState(null)
   const [user, setUser] = useState(null)
 
   const match = useMatch('/blogs/:id')
@@ -35,6 +36,11 @@ const App = () => {
     }
   }, [])
 
+  const notify = (message, type = 'success') => {
+    setNotification({ message, type })
+    setTimeout(() => setNotification(null), 5000)
+  }
+
   const handleLoginSuccess = (loggedUser) => {
     setUser(loggedUser)
     blogService.setToken(loggedUser.token)
@@ -55,12 +61,10 @@ const App = () => {
     try {
       const newBlog = await blogService.create(newBlogObject)
       setBlogs(blogs.concat(newBlog))
+      notify(`a new blog ${newBlog.title} by ${newBlog.author} added`)
       return true
     } catch {
-      setErrorMessage('Failed to add blog')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      notify('Failed to add blog', 'error')
       return false
     }
   }
@@ -81,37 +85,39 @@ const App = () => {
     try {
       await blogService.remove(id)
       setBlogs(blogs.filter(blog => blog.id !== id))
-      setErrorMessage('Blog removed')
-      setTimeout(() => setErrorMessage(null), 5000)
+      notify('Blog removed')
+      return true
     } catch (exception) {
       const message = exception.response?.data?.error || 'Removing the blog failed'
-      setErrorMessage(message)
-      setTimeout(() => setErrorMessage(null), 5000)
+      notify(message, 'error')
+      return false
     }
   }
 
-  const padding = {
-    padding: 5
-  }
   return (
-    <div>
-      <div>
-        <Link style={padding} to="/">blogs</Link>
-        {user && <Link style={padding} to="/create">create new</Link>}
-        {user && (
-          <span>
-            {user.name} logged in
-            <button onClick={handleLogout}>logout</button>
-          </span>
-        )}
-      </div>
+    <Container>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            Blog App
+          </Typography>
+          <Button color="inherit" component={Link} to="/">blogs</Button>
+          {user && <Button color="inherit" component={Link} to="/create">create new</Button>}
+          {user && (
+            <>
+              <Typography sx={{ mx: 2 }}>{user.name} logged in</Typography>
+              <Button color="inherit" onClick={handleLogout}>logout</Button>
+            </>
+          )}
+        </Toolbar>
+      </AppBar>
 
-      <Notification message={errorMessage} />
+      <Notification notification={notification} />
 
       {!user && (
         <div>
           <h2>Log in to application</h2>
-          <LoginForm onLoginSuccess={handleLoginSuccess} onError={setErrorMessage} />
+          <LoginForm onLoginSuccess={handleLoginSuccess} onError={(message) => notify(message, 'error')} />
         </div>
       )}
 
@@ -134,7 +140,7 @@ const App = () => {
           user ? <BlogForm addBlog={addBlog} /> : <Navigate replace to="/" />
         } />
       </Routes>
-    </div>
+    </Container>
   )
 }
 
